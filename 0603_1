@@ -1,0 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CubeMove : MonoBehaviour
+{
+    public float speed = 5f;  // 속도
+
+    void Start()
+    {
+        // Debug.Log(speed);
+    }
+
+    void Update()   // 매 프레임마다 호출
+    {
+        //transform.Translate(0f, 0f, Time.deltaTime * speed, Space.Self);
+        // Time.deltaTime : 이전 Update 메소드 호출 시간과 현재 Update 메소드 호출 시간 간격
+        // Space.self : 로컬 좌표계 기준 / Space.World : 월드 좌표계 기준
+
+        float h = Input.GetAxis("Horizontal");  // A키 : 음수, D키 : 양수
+        float v = Input.GetAxis("Vertical");    // W키 : 양수, S키 : 음수
+        Vector3 dir = new Vector3(h, 0f, v);
+        dir.Normalize();    // 단위벡터로 내보내어 방향 기능
+        Vector3 pos = transform.position;
+        // Vector3 : 위치 또는 벡터 정보가 사용될 때
+        // dir : 방향 정보  <-  float형을 곱해주면 x,y,z 벡터 방향에 float형 데이터를 곱하게 된다
+
+        pos += dir * speed * Time.deltaTime;  //  벡터 방향에 시간당 이동거리를 pos값에 누적시켜 더해주어 위치 값을 갱신해준다
+        transform.position = pos;
+    }
+}
