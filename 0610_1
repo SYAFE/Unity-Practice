@@ -1,0 +1,49 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Exercise1 : MonoBehaviour
+{
+    public Color nearColor = new Color(0f, 0f, 0f, 1f);
+    public Color farColor = Color.white;
+
+
+    private void Update()
+    {
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");     // Cube 태그인 오브젝트들 찾기
+        int minIndex = 0;
+        int maxIndex = 0;
+        float minDistance = Vector3.Distance(transform.position, cubes[0].transform.position);      // 3차원 거리 구하기
+        float maxDistance = minDistance;
+
+        for (int i = 1; i < cubes.Length; i++)
+        {
+            float distance =
+                Vector3.Distance(transform.position, cubes[i].transform.position);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                minIndex = i;
+            }
+
+            if (distance > maxDistance)
+            {
+                maxDistance = distance;
+                maxIndex = i;
+            }          
+        }
+
+        float diff = maxDistance - minDistance;
+        for (int i = 0; i < cubes.Length; i++)
+        {
+            float distance =
+                Vector3.Distance(transform.position, cubes[i].transform.position);
+            float normDistance = (distance - minDistance) / diff;    // 정규분포 구하기
+
+            MeshRenderer ren = cubes[i].GetComponent<MeshRenderer>();
+            ren.material.color = Color.Lerp(nearColor, farColor, normDistance);     // Lerp : 선형보간
+        }
+
+    }
+}
